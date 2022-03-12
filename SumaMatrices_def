@@ -2,9 +2,13 @@ data segment
     matriz1 db 9 dup(?)
     matriz2 db 9 dup(?)
     matriz3 db 9 dup(?) 
-    mensajePrincipal db 10,13, "Suma de Matrices: $" 
-    mensaje1 db 10,13,"Ingresa el elemento de la matriz A :$"
-    mensaje2 db 10,13,"Ingrese el elemento de la matriz B :$"
+    mensajePrincipal db 10,13, "Suma de Matrices $" 
+    mensaje1 db 10,13,"Ingresa los elementos de la matriz A :$"
+    mensaje2 db 10,13,"Ingrese los elemento de la matriz B :$"
+    
+    x db 10, 13, "1$"
+    y db 10, 13, "1$"
+    coma db 10, 13, ", $"
     
 
 ends
@@ -14,48 +18,65 @@ stack segment
 ends
 
 code segment
-principal proc far: ;
-assume ds:data, cs:codigo, ss:pila  
-push ds
-mov ax, 0
-push ax     
+principal:  
 
-mov ax, data 
+ASSUME  CS: code, DS: data, SS: stack
+mov ax, data
 mov ds, ax
-mov es, ax
+
 
 ;----------------------------CODIGO-------------------------------------
 
 
-lea dx, mensajePrincipal
-mov ah, 09H
-int 21H 
+    mov dx, offset mensajePrincipal
+    call imprimir
+    jmp llenado
+    
+    mov cx, 9 ;loop que se repetira 9 veces
+        llenado:  
+    
+        mov dx, offset mensaje1 ;leyendo la direccion del mensaje
+        call imprimir
+        
+         
+        mov dx, offset x
+        call imprimir
+        
+        mov dx, offset coma
+        call imprimir   
+        
+        mov dx, offset y
+        call imprimir
+        jmp finalizar 
+        
+        ;call input
+        
+        
+        loop llenado
+        
+        
+    
+    imprimir: 
+        mov ah, 09H
+        int 21H
+        ret ;retorna a la ejecucion de donde fue llamado
+        
+    input: 
+    
+        mov ah, 01 ;espera input del usuario
+        int 21H
+        ret
+        
+    finalizar:
+    mov ax, 4c00h  ;finaliza el programa
+    int 21h 
 
-
-mov cx, 9 ;loop que se repetira 9 veces
-    llenado:  
-
-    lea dx, mensaje1 ;leyendo la direccion del mensaje
-
-    mov ah, 09H ;salida del string
-    int 21H
-    loop llenado
- 
+    
 
 ;-----------------------------------------------------------------------
 
-    
 
-    
-
-mov ax, 4c00h
-int 21h  
-      
-ret  ;retorno de procedimiento    
-principal endp
 code ends 
-
-end principal
 
 
 
