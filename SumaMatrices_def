@@ -1,4 +1,11 @@
-data segment
+data segment  
+    matriz1 db 9 dup(?)
+    matriz2 db 9 dup(?)
+    matriz3 db 9 dup(?) 
+    mensajePrincipal db 10,13, "Suma de Matrices: $" 
+    mensaje1 db 10,13,"Ingresa el elemento de la matriz A :$"
+    mensaje2 db 10,13,"Ingrese el elemento de la matriz B :$"
+    
 
 ends
 
@@ -7,13 +14,48 @@ stack segment
 ends
 
 code segment
-start:
+principal proc far: ;
+assume ds:data, cs:codigo, ss:pila  
+push ds
+mov ax, 0
+push ax     
 
-    ; add your code here
+mov ax, data 
+mov ds, ax
+mov es, ax
+
+;----------------------------CODIGO-------------------------------------
+
+
+lea dx, mensajePrincipal
+mov ah, 09H
+int 21H 
+
+
+mov cx, 9 ;loop que se repetira 9 veces
+    llenado:  
+
+    lea dx, mensaje1 ;leyendo la direccion del mensaje
+
+    mov ah, 09H ;salida del string
+    int 21H
+    loop llenado
+ 
+
+;-----------------------------------------------------------------------
+
+    
+
+    
 
 mov ax, 4c00h
 int 21h  
+      
+ret  ;retorno de procedimiento    
+principal endp
+code ends 
 
-ends
+end principal
 
-end start
+
+
