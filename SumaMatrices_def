@@ -5,6 +5,7 @@ data segment
     mensajePrincipal db 10,13,"Suma de Matrices $" 
     mensaje1 db 10,13,"Ingresa el elemento de la matriz A :$"
     mensaje2 db 10,13,"Ingrese los elemento de la matriz B :$"
+    salto db 10,13, "$"
     
     m11 db 10,13, "(1,1): $"
     m12 db 10,13, "(1,2): $"
@@ -18,7 +19,7 @@ data segment
     m32 db 10,13, "(3,2): $"
     m33 db 10,13, "(3,3): $"
     
-    
+    mensajeSuma db 10, 13, "Se realizo una suma$"
     
     x db 1
     y db 1
@@ -35,88 +36,227 @@ stack segment
     dw   128  dup(0)
 ends
 
+
+
+    
+        
+
+
+
 code segment
 principal:  
 
-ASSUME  CS: code, DS: data, SS: stack
-mov ax, data
-mov ds, ax
-
-
-;----------------------------CODIGO-------------------------------------
-
-mov dx, offset mensajePrincipal
-call imprimir
+    ASSUME  CS: code, DS: data, SS: stack
+    mov ax, data
+    mov ds, ax
     
     
+    ;----------------------------CODIGO-------------------------------------
     
-    mov cx, 9 ;loop que se repetira 9 veces
+    mov dx, offset mensajePrincipal
+    call imprimir  
+    
+       
+    llenar1:
+    
+        mov dx, offset mensaje1
+        call imprimir
+
+    
+
+        mov dx, offset m11
+        call imprimir
+        call input
         
-    llenado1:mov dx, offset mensaje1 ;leyendo la direccion del mensaje
-             call imprimir
-            
-             
-   
-             
-             call input
-            
-             mov dl, al ;copia el contenido del registro al al registo dl
-            
-             mov matriz1[si],dl
-             inc si
-              
+        mov bl, al ;copia el contenido del registro al al registo dl      
+        mov matriz1[0],bl
+          
+        
+        mov dx, offset m12
+        call imprimir
+        call input
+        
+        mov bl, al
+        mov matriz1[1],bl
+        
+        mov dx, offset m13
+        call imprimir
+        call input
+        
+        mov bl, al
+        mov matriz1[2],bl  
+        
+        mov dx, offset m21
+        call imprimir
+        call input
+        
+        mov bl, al
+        mov matriz1[3],bl
+        
+        mov dx, offset m22
+        call imprimir
+        call input
+        
+        mov bl, al
+        mov matriz1[4],bl
+        
+        mov dx, offset m23
+        call imprimir
+        call input
+        
+        mov bl, al
+        mov matriz1[5],bl
+        
+        mov dx, offset m31
+        call imprimir
+        call input 
+        
+        mov bl, al
+        mov matriz1[6],bl
+        
+        mov dx, offset m32
+        call imprimir
+        call input
+        
+        mov bl, al
+        mov matriz1[7],bl
+        
+        mov dx, offset m33
+        call imprimir
+        call input 
+        
+        mov bl, al
+        mov matriz1[8],bl
+        
+        mov dx, offset salto
+        call imprimir
+        
+        
+        
+        
+        
+       
+    llenar2:
+    
+        mov dx, offset mensaje2
+        call imprimir
+    
+
+        mov dx, offset m11
+        call imprimir
+        call input
+        
+        mov bl, al
+        mov matriz2[0],bl   
+        
+        mov dx, offset m12
+        call imprimir
+        call input
+        
+        mov bl, al
+        mov matriz2[1],bl
+         
+        
+        mov dx, offset m13
+        call imprimir
+        call input
+        
+        mov bl, al
+        mov matriz2[2],bl   
+        
+        mov dx, offset m21
+        call imprimir
+        call input
+        
+        mov bl, al
+        mov matriz2[3],bl 
+        
+        mov dx, offset m22
+        call imprimir
+        call input
+        
+        mov bl, al
+        mov matriz2[4],bl 
+        
+        mov dx, offset m23
+        call imprimir
+        call input
+        
+        mov bl, al
+        mov matriz2[5],bl 
+        
+        mov dx, offset m31
+        call imprimir
+        call input
+        
+        mov bl, al
+        mov matriz2[6],bl 
+        
+        mov dx, offset m32
+        call imprimir
+        call input
+        
+        mov bl, al
+        mov matriz2[7],bl 
+        
+        mov dx, offset m33
+        call imprimir
+        call input
+        
+        mov bl, al
+        mov matriz2[8],bl
+        
+         
+        
+        
+    mov cx, 9    
+    suma:mov si, 0
+         mov al,matriz1[si] ;valor de la matriz1 en la posicion si hacia  ax(parte baja)
+         add al,matriz2[si] ;sumando valor de la matriz2 en la posicion si al regsitro ax (parte baja)
+         mov matriz3[si], al
+         
+         mov dx, offset mensajeSuma
+         call imprimir
+         
+         inc si
+         loop suma
+         jmp finalizar
            
-            
-             loop llenado1 ; resta el valor de cx en 1 cada vez que se ejecuta el loop
-              
-             mov cx, 9 ; 9 iteraciones para el llenado 2
-             mov si, 0
-             
-            
-             jmp llenado2
     
-            
-    
-            
-    llenado2: mov dx, offset mensaje2
-              call imprimir 
-              
-              call input
-              
-              mov dh, al
-              
-              mov matriz2[si],dh
-              inc si
-              
-              
-              loop llenado2
-              
-  
-              call finalizar
-    
-      
-
-    imprimir: 
-        mov ah, 09H
-        int 21H
-        ret ;retorna a la ejecucion de donde fue llamado
         
+
+    imprimir:
+            mov ah, 09H
+            int 21H
+            ret ;retorna a la ejecucion de donde fue llamado
+    
+            
     input: 
+            mov ah, 01 ;espera input del usuario
+            int 21H
+            ret     ;almacena en registro "al"       
     
-        mov ah, 01 ;espera input del usuario
-        int 21H
-        ret     ;almacena en registro "al"
-        
+            
     finalizar:
-    mov ax, 4c00h  ;finaliza el programa
-    int 21h 
+        mov ax, 4c00h  ;finaliza el programa
+        int 21h
+    
+          
 
+   
     
 
 
 ;-----------------------------------------------------------------------
 
-code ends 
+
+
+
+code ends
+
+
+
+
 
 
 
