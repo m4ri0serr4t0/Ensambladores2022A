@@ -1,4 +1,3 @@
-
 include 'emu8086.inc'
 
 data segment
@@ -87,10 +86,16 @@ principal:
     
     ;----------------------------CODIGO-------------------------------------
     
+    mov si, 0
+    mov al, matriz1[si]
+    
+    
      
     
        
     llenar1:
+    
+            
     
         mov dx, offset mensajePrincipal
         call imprimir 
@@ -169,15 +174,21 @@ principal:
         mov dx, offset salto
         call imprimir
         
+        mov cx, 0   ;limpia registro cx
+        mov ax, 0   ;limpia registri ax
+        
+        jmp llenar2 
         
         
         
-        
+
        
     llenar2:
     
-        ;mov dx, offset mensaje2
-        ;call imprimir
+
+    
+        mov dx, offset mensaje2
+        call imprimir
     
         
         mov dx, offset m11
@@ -185,7 +196,7 @@ principal:
         call SCAN_NUM ;almancena en registro cx
         
         mov ax, cx ;copia el contenido del registro al al registo dl      
-        mov matriz2[0],ah ;origen 8 bit, destino 16 
+        mov matriz2[0],al ;origen 8 bit, destino 16 
         
         ;****************VERIFICAR POR QUE ES AL**************
           
@@ -195,7 +206,7 @@ principal:
         call SCAN_NUM
         
         mov ax, cx
-        mov matriz2[1],ah
+        mov matriz2[1],al
         
         mov dx, offset m13
         call imprimir
@@ -203,55 +214,55 @@ principal:
         
         
         mov ax, cx
-        mov matriz2[2],ah  
+        mov matriz2[2],al  
         
         mov dx, offset m21
         call imprimir
         call SCAN_NUM
         
         mov ax, cx
-        mov matriz2[3],ah
+        mov matriz2[3],al
         
         mov dx, offset m22
         call imprimir
         call SCAN_NUM
         
         mov ax, cx
-        mov matriz2[4],ah
+        mov matriz2[4],al
         
         mov dx, offset m23
         call imprimir
         call SCAN_NUM
         
         mov ax, cx
-        mov matriz2[5],ah
+        mov matriz2[5],al
         
         mov dx, offset m31
         call imprimir
         call SCAN_NUM 
         
         mov ax, cx
-        mov matriz2[6],ah
+        mov matriz2[6],al
         
         mov dx, offset m32
         call imprimir
         call SCAN_NUM
         
         mov ax, cx
-        mov matriz2[7],ah
+        mov matriz2[7],al
         
         mov dx, offset m33
         call imprimir
         call SCAN_NUM
         
         mov ax, cx
-        mov matriz2[8],ah
+        mov matriz2[8],al
         
          
         mov dx, offset mensajeSuma
         call imprimir
         
-        
+        mov ax, 0 ;limpia registo ax
         jmp suma 
         
         
@@ -259,7 +270,7 @@ principal:
     
     suma:
     
-         mov ax, 0  
+         
          
          
          mov al,matriz1[0] 
@@ -299,40 +310,17 @@ principal:
          mov matriz3[8], al
          
          
-         
-         
-         
+
        
          jmp imprimirMatriz3
          
          
-    imprimirMatriz3: ;usando posicionamiento de cursor
+    imprimirMatriz3: ;usando posicionamiento de cursor 
+    ;doesnt work
         
-         call CLEAR_SCREEN
-         
-         
-            
-         mov ah, 09H
-         lea dx, mensajeResultado
-         int 21h
-         
-         
-         mov ah, 02H
-         mov dx, 032h
-         int 10h
-         
-         
-         mov ah, 09H
-         lea dx, cadena
-         int 21h
-         
-         
-         
-         
-         
-         
-         jmp finalizar
-         
+        mov dx, offset mensajeResultado
+        call imprimir
+        
          
          
        
@@ -362,10 +350,6 @@ principal:
     
           
 
-   
-    
-
-
 ;-----------------------------------------------------------------------
 
 
@@ -380,4 +364,6 @@ DEFINE_PRINT_STRING
 DEFINE_PRINT_NUM
 DEFINE_PRINT_NUM_UNS  ; required for print_num.
 DEFINE_PTHIS
+
+
 
