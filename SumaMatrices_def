@@ -1,11 +1,25 @@
-data segment  
-    matriz1 db 9 dup(?)
-    matriz2 db 9 dup(?)
-    matriz3 db 9 dup(?) 
+
+include 'emu8086.inc'
+
+data segment
+    
+      
+    matriz1 db 9 dup(0)
+    matriz2 db 9 dup(0)
+    matriz3 db 9 dup(0) 
     mensajePrincipal db 10,13,"Suma de Matrices $" 
     mensaje1 db 10,13,"Ingresa el elemento de la matriz A :$"
     mensaje2 db 10,13,"Ingrese los elemento de la matriz B :$"
     salto db 10,13, "$"
+    
+    
+    cadena db 10,13, "valor 1 $"
+    cadena1 db 10,13, "valor 2 $"
+    cadena2 db 10,13, "valor 3 $"
+    
+    
+    
+    mensajeResultado db 10, 13, "El resultado de la suma de las matrices es: $"
     
     m11 db 10,13, "(1,1): $"
     m12 db 10,13, "(1,2): $"
@@ -21,8 +35,8 @@ data segment
     
     mensajeSuma db 10, 13, "Se realizo una suma$"
     
-    x db 1
-    y db 1
+    x db 2
+    y db 3
     
     m db ?
     n db ?
@@ -38,7 +52,24 @@ ends
 
 
 
+
+cadenaAnumero proc 
     
+    
+    
+   ;*********************************************************************************************
+   
+   
+endp
+
+
+numeroACadena proc 
+    
+    ;*************************************
+    
+    
+    
+endp
         
 
 
@@ -53,11 +84,13 @@ principal:
     
     ;----------------------------CODIGO-------------------------------------
     
-    mov dx, offset mensajePrincipal
-    call imprimir  
+     
     
        
     llenar1:
+    
+        mov dx, offset mensajePrincipal
+        call imprimir 
     
         mov dx, offset mensaje1
         call imprimir
@@ -207,24 +240,107 @@ principal:
         mov matriz2[8],bl
         
          
+        mov dx, offset mensajeSuma
+        call imprimir
         
         
-    mov cx, 9    
-    suma:mov si, 0
-         mov al,matriz1[si] ;valor de la matriz1 en la posicion si hacia  ax(parte baja)
-         add al,matriz2[si] ;sumando valor de la matriz2 en la posicion si al regsitro ax (parte baja)
-         mov matriz3[si], al
-         
-         mov dx, offset mensajeSuma
-         call imprimir
-         
-         inc si
-         loop suma
-         jmp finalizar
-           
-    
+        jmp suma 
+        
         
 
+    
+    suma:
+    
+         mov ax, 0  
+         
+         
+         mov al,matriz1[0] 
+         add al,matriz2[0] 
+         mov matriz3[0], al
+         
+         mov al,matriz1[1] 
+         add al,matriz2[1] 
+         mov matriz3[1], al
+         
+         mov al,matriz1[2] 
+         add al,matriz2[2] 
+         mov matriz3[2], al
+         
+         mov al,matriz1[3] 
+         add al,matriz2[3] 
+         mov matriz3[3], al
+         
+         mov al,matriz1[4] 
+         add al,matriz2[4] 
+         mov matriz3[4], al
+         
+         mov al,matriz1[5] 
+         add al,matriz2[5] 
+         mov matriz3[5], al 
+         
+         mov al,matriz1[6] 
+         add al,matriz2[6] 
+         mov matriz3[6], al
+         
+         mov al,matriz1[7] 
+         add al,matriz2[7] 
+         mov matriz3[7], al
+         
+         mov al,matriz1[8] 
+         add al,matriz2[8] 
+         mov matriz3[8], al
+         
+         
+         
+         
+         
+       
+         jmp imprimirMatriz3
+         
+         
+    imprimirMatriz3: ;usando posicionamiento de cursor
+        
+         call CLEAR_SCREEN
+         
+         
+            
+         ;mov dx, offset mensajeResultado
+         ;call imprimir
+         
+         
+         mov ah, 02H
+         mov dx, 012h
+         int 10h
+         
+         
+         mov dx, offset cadena
+         call imprimir
+         
+         mov ah, 02H
+         mov dx, 018h
+         int 10h
+         
+         
+         mov dx, offset cadena1
+         call imprimir
+         
+         
+         
+         
+         
+         jmp finalizar
+         
+         
+         
+       
+        
+        
+     
+            
+       
+
+
+            
     imprimir:
             mov ah, 09H
             int 21H
@@ -255,6 +371,7 @@ principal:
 code ends
 
 
+DEFINE_CLEAR_SCREEN
 
 
 
