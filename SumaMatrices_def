@@ -5,8 +5,11 @@ data segment
     
       
     matriz1 db 9 dup(0)
+    
     matriz2 db 9 dup(0)
-    matriz3 db 9 dup(0) 
+    
+    matriz3 db 9 dup(0)
+     
     mensajePrincipal db 10,13,"Suma de Matrices $" 
     mensaje1 db 10,13,"Ingresa el elemento de la matriz A :$"
     mensaje2 db 10,13,"Ingrese los elemento de la matriz B :$"
@@ -99,67 +102,69 @@ principal:
 
         mov dx, offset m11
         call imprimir
-        call input
+        call SCAN_NUM ;almancena en registro cx
         
-        mov bl, al ;copia el contenido del registro al al registo dl      
-        mov matriz1[0],bl
+        mov ax, cx ;copia el contenido del registro al al registo dl      
+        mov matriz1[0],al ;origen 8 bit, destino 16 
+        
+        ;****************VERIFICAR POR QUE ES AL**************
           
         
         mov dx, offset m12
         call imprimir
-        call input
+        call SCAN_NUM
         
-        mov bl, al
-        mov matriz1[1],bl
+        mov ax, cx
+        mov matriz1[1],al
         
         mov dx, offset m13
         call imprimir
-        call input
+        call SCAN_NUM
         
-        mov bl, al
-        mov matriz1[2],bl  
+        mov ax, cx
+        mov matriz1[2],al  
         
         mov dx, offset m21
         call imprimir
-        call input
+        call SCAN_NUM
         
-        mov bl, al
-        mov matriz1[3],bl
+        mov ax, cx
+        mov matriz1[3],al
         
         mov dx, offset m22
         call imprimir
-        call input
+        call SCAN_NUM
         
-        mov bl, al
-        mov matriz1[4],bl
+        mov ax, cx
+        mov matriz1[4],al
         
         mov dx, offset m23
         call imprimir
-        call input
+        call SCAN_NUM
         
-        mov bl, al
-        mov matriz1[5],bl
+        mov ax, cx
+        mov matriz1[5],al
         
         mov dx, offset m31
         call imprimir
-        call input 
+        call SCAN_NUM 
         
-        mov bl, al
-        mov matriz1[6],bl
+        mov ax, cx
+        mov matriz1[6],al
         
         mov dx, offset m32
         call imprimir
-        call input
+        call SCAN_NUM
         
-        mov bl, al
-        mov matriz1[7],bl
+        mov ax, cx
+        mov matriz1[7],al
         
         mov dx, offset m33
         call imprimir
-        call input 
+        call SCAN_NUM
         
-        mov bl, al
-        mov matriz1[8],bl
+        mov ax, cx
+        mov matriz1[8],al
         
         mov dx, offset salto
         call imprimir
@@ -171,73 +176,76 @@ principal:
        
     llenar2:
     
-        mov dx, offset mensaje2
-        call imprimir
+        ;mov dx, offset mensaje2
+        ;call imprimir
     
-
+        
         mov dx, offset m11
         call imprimir
-        call input
+        call SCAN_NUM ;almancena en registro cx
         
-        mov bl, al
-        mov matriz2[0],bl   
+        mov ax, cx ;copia el contenido del registro al al registo dl      
+        mov matriz2[0],ah ;origen 8 bit, destino 16 
+        
+        ;****************VERIFICAR POR QUE ES AL**************
+          
         
         mov dx, offset m12
         call imprimir
-        call input
+        call SCAN_NUM
         
-        mov bl, al
-        mov matriz2[1],bl
-         
+        mov ax, cx
+        mov matriz2[1],ah
         
         mov dx, offset m13
         call imprimir
-        call input
+        call SCAN_NUM
         
-        mov bl, al
-        mov matriz2[2],bl   
+        
+        mov ax, cx
+        mov matriz2[2],ah  
         
         mov dx, offset m21
         call imprimir
-        call input
+        call SCAN_NUM
         
-        mov bl, al
-        mov matriz2[3],bl 
+        mov ax, cx
+        mov matriz2[3],ah
         
         mov dx, offset m22
         call imprimir
-        call input
+        call SCAN_NUM
         
-        mov bl, al
-        mov matriz2[4],bl 
+        mov ax, cx
+        mov matriz2[4],ah
         
         mov dx, offset m23
         call imprimir
-        call input
+        call SCAN_NUM
         
-        mov bl, al
-        mov matriz2[5],bl 
+        mov ax, cx
+        mov matriz2[5],ah
         
         mov dx, offset m31
         call imprimir
-        call input
+        call SCAN_NUM 
         
-        mov bl, al
-        mov matriz2[6],bl 
+        mov ax, cx
+        mov matriz2[6],ah
         
         mov dx, offset m32
         call imprimir
-        call input
+        call SCAN_NUM
         
-        mov bl, al
-        mov matriz2[7],bl 
+        mov ax, cx
+        mov matriz2[7],ah
         
         mov dx, offset m33
         call imprimir
-        call input
+        call SCAN_NUM
         
-        mov bl, al
-        mov matriz2[8],bl
+        mov ax, cx
+        mov matriz2[8],ah
         
          
         mov dx, offset mensajeSuma
@@ -304,25 +312,20 @@ principal:
          
          
             
-         ;mov dx, offset mensajeResultado
-         ;call imprimir
+         mov ah, 09H
+         lea dx, mensajeResultado
+         int 21h
          
          
          mov ah, 02H
-         mov dx, 012h
+         mov dx, 032h
          int 10h
          
          
-         mov dx, offset cadena
-         call imprimir
+         mov ah, 09H
+         lea dx, cadena
+         int 21h
          
-         mov ah, 02H
-         mov dx, 018h
-         int 10h
-         
-         
-         mov dx, offset cadena1
-         call imprimir
          
          
          
@@ -372,9 +375,9 @@ code ends
 
 
 DEFINE_CLEAR_SCREEN
-
-
-
-
-
+DEFINE_SCAN_NUM
+DEFINE_PRINT_STRING
+DEFINE_PRINT_NUM
+DEFINE_PRINT_NUM_UNS  ; required for print_num.
+DEFINE_PTHIS
 
