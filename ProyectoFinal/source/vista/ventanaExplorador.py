@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import filedialog
 from tkinter.filedialog import askopenfile
 
+
 ventana = Tk()
 ventana.geometry('300x100')
 ventana.title('Explorador de Archivos')
