@@ -17,7 +17,7 @@ def open_file():
         content = file.read()
         print(content)
 
-
+#comentario
 btn = Button(ventana, text='Abrir Archivo', command=lambda: open_file())
 btn.pack(side=TOP, pady=10)
 
