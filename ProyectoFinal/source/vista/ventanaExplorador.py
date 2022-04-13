@@ -1,27 +1,38 @@
 from tkinter import *
-from tkinter import filedialog
+from tkinter import filedialog, messagebox
 from tkinter.filedialog import askopenfile
 
 
+def open_file():
+    # file = filedialog.askopenfilename(initialdir="/", title="Selecciona un archivo",
+    # filetypes=(("Ensamblador", "*.asm*"), ("Todos los archivos", "*.*")))
+    file = askopenfile(mode='r', filetypes=[('Archivos Ensamblador', '*.asm')])
+    # label.config(text='Se ha abierto el archivo con la ubicación: '+file)
+
+    if file is not None:
+        content = file.read()
+        messagebox.showinfo("Codigo", content)
+
+
+    # if file is not None:
+    # content = file.read()
+    # print(content)
+
+
 ventana = Tk()
-ventana.geometry('300x100')
+ventana.geometry('600x200')
 ventana.title('Explorador de Archivos')
 ventana.iconbitmap("icon/asm.ico")
 
+etiqueta = Label(ventana, text="Explorador de Archivos", width=100, height=4, fg="black")
+etiqueta.pack()
 
-# This function will be used to open
-# file in read mode and only Python files
-# will be opened
-def open_file():
-    file = askopenfile(mode='r', filetypes=[('Archivos Ensamblador', '*.asm')])
-    if file is not None:
-        content = file.read()
-        print(content)
+btn = Button(ventana, text='Abrir Archivo', background="green", command=lambda: open_file())
+btn.pack()
 
-#comentario
-btn = Button(ventana, text='Abrir Archivo', command=lambda: open_file())
-btn.pack(side=TOP, pady=10)
+btn2 = Button(ventana, text='   Salir    ', background="red", command=lambda: exit())
+btn2.pack()
 
-btn2 = Button(ventana, text='Exit', command=lambda: exit())
-btn2.pack(side=BOTTOM, pady=10)
+etiqueta2 = Label(ventana, text="Equipo 1 2022-A", width=100, height=4, fg="black")
+etiqueta2.pack()
 mainloop()
