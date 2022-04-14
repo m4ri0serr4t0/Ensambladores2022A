@@ -1,6 +1,10 @@
 from tkinter import *
-from tkinter import messagebox
+from tkinter import filedialog, messagebox
 from tkinter.filedialog import askopenfile
+
+from self import self
+
+from ProyectoFinal.source.vista.Ventana import Ventana
 
 
 def open_file():
@@ -10,20 +14,16 @@ def open_file():
         messagebox.showinfo("Codigo", content)
 
 
-class Ventana:
+class VentanaExplorador(Ventana):
 
     def __init__(self, root, title, geometry, icon):
-        self.root = root
-        self.root.title(title)
-        self.root.geometry(geometry)  # sizexsize
-        self.root.iconbitmap(icon)
+        super().__init__(root, title, geometry, icon)
 
-        Label(self.root, text="Explorador de Archivos", width=100, height=4, fg="black").pack()
-
+        label = Label(self.root, text="Explorador de Archivos", width=100, height=4, fg="black")
+        label.pack()
         btn = Button(self.root, text='Abrir Archivo', background="green", command=lambda: open_file())
         btn.pack()
         btn2 = Button(self.root, text='   Salir    ', background="red", command=lambda: exit())
         btn2.pack()
-
-        self.root.mainloop()
+        Ventana.mainloop()
 
