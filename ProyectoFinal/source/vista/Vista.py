@@ -14,13 +14,28 @@ def open_file():
         newtext = ''
         for i in e:
             texto = str(i)
-            newtext += (texto+'\n')
-        ventana2 = Tk()
-        ventana2.geometry('200x300')
-        ventana2.title('Elementos')
-        labelElementos = Label(ventana2, text=newtext)
-        labelElementos.pack()
 
+            if validarComentario(texto):
+                newtext += (texto + '\n')
+            else:
+                pass
+        ventana2 = Tk()
+        ventana2.geometry('400x400')
+        ventana2.title('Elementos')
+        labelTitulo = Label(ventana2, text='El programa tiene los siguientes elementos:', fg="blue")
+        labelTitulo.grid(row=1, column=4)
+        labelElementos = Label(ventana2, text=newtext)
+        labelElementos.grid(row=2, column=5)
+        btnpag = Button(ventana2, text='Siguiente Página', bg='green')
+        btnpag.grid(row=3, column = 6)
+
+
+
+
+
+def validarComentario(string):
+    if not string.startswith(';'):
+        return True
 
 def separarElementos(lista):
     new_list = lista.split()
@@ -31,13 +46,7 @@ def mostrarError():
     messagebox.showwarning("Error", "Selecciona un archivo")
 
 
-# def leerArchivo():
-# file = 'C:programa/archivoensambaldor'
-# contenido = file.read()
-# def leerpossa
-
-
-class Ventana:
+class Vista:
 
     def __init__(self, root, title, geometry, icon):
         self.root = root
@@ -51,8 +60,6 @@ class Ventana:
         btn = Button(self.root, text='Abrir Archivo Para Lectura', background="green", command=lambda: open_file())
         btn.pack()
 
-
-
         btn2 = Button(self.root, text='   Salir    ', background="red", command=lambda: exit())
         btn2.pack()
 
@@ -60,5 +67,3 @@ class Ventana:
         label3.pack(side=BOTTOM)
 
         self.root.mainloop()
-
-

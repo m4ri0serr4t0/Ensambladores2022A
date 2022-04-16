@@ -1,9 +1,9 @@
-from ProyectoFinal.source.vista.Ventana import Ventana
+from ProyectoFinal.source.vista.Vista import Vista
 from tkinter import *
 
-from ProyectoFinal.source.vista.VentanaExplorador import VentanaExplorador
+from ProyectoFinal.source.vista.Vista import Vista
 
 _rutaIcono = 'icon/asm.ico'
 if __name__ == '__main__':
     root = Tk()
-    ventana = VentanaExplorador(root, 'Explorador de Archivos', '600x200', _rutaIcono)
+    vista = Vista(root, 'Explorador de Archivos', '600x200', _rutaIcono)
