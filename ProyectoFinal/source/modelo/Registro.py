@@ -8,4 +8,5 @@ class Registro:
                      'BP', 'SP', 'SI', 'DI'
                      ]
 
+
         return registers

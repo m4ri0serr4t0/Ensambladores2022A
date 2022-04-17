@@ -2,6 +2,8 @@ from tkinter import *
 from tkinter import messagebox
 from tkinter.filedialog import askopenfile
 
+from ProyectoFinal.source.modelo.Registro import Registro
+
 
 def open_file():
     file = askopenfile(mode='r', filetypes=[('Archivos Ensamblador', '*.asm')])
@@ -14,21 +16,30 @@ def open_file():
         newtext = ''
         for i in e:
             texto = str(i)
-
             if validarComentario(texto):
                 newtext += (texto + '\n')
             else:
                 pass
-        ventana2 = Tk()
-        ventana2.geometry('400x400')
-        ventana2.title('Elementos')
-        labelTitulo = Label(ventana2, text='El programa tiene los siguientes elementos:', fg="blue")
-        labelTitulo.grid(row=1, column=4)
-        labelElementos = Label(ventana2, text=newtext)
-        labelElementos.grid(row=2, column=5)
-        btnpag = Button(ventana2, text='Siguiente Página', bg='green')
-        btnpag.grid(row=3, column = 6)
+        
 
+        ventanaElementos = Tk()
+        ventanaElementos.geometry('400x400')
+        ventanaElementos.title('Elementos')
+        labelTitulo = Label(ventanaElementos, text='El programa tiene los siguientes elementos:', fg="blue")
+        labelTitulo.pack(side=TOP)
+
+        scrollbar = Scrollbar(ventanaElementos)
+        scrollbar.pack(side=RIGHT)
+
+        labelElementos = Label(ventanaElementos, text=newtext)
+        labelElementos.pack(side=TOP)
+
+
+
+        btnpag = Button(ventanaElementos, text='Siguiente Página', bg='green')
+        btnpag.pack(side=BOTTOM)
+
+        ventanaElementos.mainloop()
 
 
 
@@ -36,6 +47,9 @@ def open_file():
 def validarComentario(string):
     if not string.startswith(';'):
         return True
+def validarRegistros(string):
+    r= Registro()
+    registers = r.registros()
 
 def separarElementos(lista):
     new_list = lista.split()
