@@ -20,36 +20,36 @@ def open_file():
                 newtext += (texto + '\n')
             else:
                 pass
-        
 
         ventanaElementos = Tk()
         ventanaElementos.geometry('400x400')
         ventanaElementos.title('Elementos')
+        ventanaElementos.iconbitmap('icon/asm.ico')
+
         labelTitulo = Label(ventanaElementos, text='El programa tiene los siguientes elementos:', fg="blue")
         labelTitulo.pack(side=TOP)
 
-        scrollbar = Scrollbar(ventanaElementos)
+        textElementos = Text(ventanaElementos, height=50, width=30)
+        scrollbar = Scrollbar(ventanaElementos, command=textElementos.yview())
         scrollbar.pack(side=RIGHT)
 
-        labelElementos = Label(ventanaElementos, text=newtext)
-        labelElementos.pack(side=TOP)
+        textElementos.insert(END, newtext)
+        textElementos.configure(state='disabled')
+        textElementos.pack(side=LEFT)
 
-
-
-        btnpag = Button(ventanaElementos, text='Siguiente Página', bg='green')
-        btnpag.pack(side=BOTTOM)
 
         ventanaElementos.mainloop()
-
-
 
 
 def validarComentario(string):
     if not string.startswith(';'):
         return True
+
+
 def validarRegistros(string):
-    r= Registro()
+    r = Registro()
     registers = r.registros()
+
 
 def separarElementos(lista):
     new_list = lista.split()
