@@ -83,7 +83,7 @@ def open_file():
         botonCodigo = Button(ventanaCodigo, text=' Separar Elementos  ', font='terminal', background='green',
                              command=lambda: windowElementosIdentificacion(textoElementos, textoTotal))
         botonCodigo.pack(side=RIGHT)
-        windowIdentificacion(textoTotal)
+        windowIdentificacion(textoTotal)#ventana Identificación de Elementos
 
 
 
