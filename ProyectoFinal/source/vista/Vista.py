@@ -26,36 +26,37 @@ def open_file():
         mostrarAdvertencia()  # Muestra advertencia
     else:
         content = file.read()
-        # ventanaContenido = Tk() #Contenido a desplegar en otra ventana
-        # ventanaContenido.title('Código')
-        # ventanaContenido.geometry('')
-        # ventanaContenido.iconbitmap('icon/asm.ico')
-        # labelCodigo = Label(ventanaContenido, text=content, fg='black')
-        # labelCodigo.pack()
-
         messagebox.showinfo("Código", content)
-        e = separarElementos(content)
+        listaElementos = separarElementos(content)
+        stringElementos = ''
+        for i in listaElementos:
+            stringElementos += i + '\n'
+
         textoElementos = ''
         textoTotal = ''
-        for i in e:
+        for i in listaElementos:
             palabra = str(i)
+            palabra2 = listaElementos[listaElementos.index(palabra) + 1]
             newtextRegistros = palabra[0:2]
-            if newtextRegistros in (i.lower() for i in
-                                    registers):  # Hace recorrido para todos los elementos de la lista registros en minuscula
+            if (newtextRegistros in registers) or (newtextRegistros in (i.lower() for i in
+                                                                        registers)):  # Hace recorrido para todos los elementos de la lista registros en minuscula
                 textoTotal += (newtextRegistros + '  ------> Es Registro' + '\n')
 
-            if palabra in (i.lower() for i in
-                           instrucciones):  # Hace recorrido para todos los elementos de la lista registros en minuscula
+            if (palabra in instrucciones) or (palabra in (i.lower() for i in
+                                                          instrucciones)):  # Hace recorrido para todos los elementos de la lista registros en minuscula
                 textoTotal += (palabra + '------> Es Instrucción' + '\n')
-
-            if validarComentario(palabra) or validarSegmento(palabra):
-                textoElementos += (palabra + '\n')
-
+            if palabra2 == 'segment':
+                textoElementos += (palabra + ' ' + palabra2 + '\n')
             else:
-                pass
+
+                if validarComentario(palabra) and palabra != 'segment':
+                    textoElementos += (palabra + '\n')
+
+                else:
+                    pass
 
         ventanaElementos = Tk()
-        ventanaElementos.geometry('400x400')
+        ventanaElementos.geometry()
         ventanaElementos.title('Elementos')
         ventanaElementos.iconbitmap('icon/asm.ico')
 
@@ -83,11 +84,11 @@ def open_file():
         labelTituloIdentificacion.pack(side=TOP)
         labelIdentificacion.pack(side=BOTTOM)
 
-        ventanaIdentificacion.mainloop()
 
 
-def validarSegmento(string):
-    if string.startswith('.'):
+
+def validarSegmento(string1, string2):
+    if string1.startswith('.') and string2.startswith('segment'):
         return True
 
 
