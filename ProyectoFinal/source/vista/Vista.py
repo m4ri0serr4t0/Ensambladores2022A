@@ -21,12 +21,32 @@ instrucciones = ['AAA', 'MOVSB', 'CLD', 'PUSHF', 'DAA',
 
 
 def open_file():
-    file = askopenfile(mode='r', filetypes=[('Archivos Ensamblador', '*.asm')])
-    if file is None:
+    """
+    Esta función abre el archivo tipo asm y ejecuta las ventana para el analizador léxico""
+    :return:
+    """
+    file = askopenfile(mode='r',
+                       filetypes=[('Archivos Ensamblador', '*.asm')])  # Abirendo el archivo desde un file explorer
+    if file is None:  # Si el usuario no selecciona algún archivo
         mostrarAdvertencia()  # Muestra advertencia
     else:
-        content = file.read()
-        messagebox.showinfo("Código", content)
+        content = file.read()  # Lee el contenido del archivo
+
+        ventanaCodigo = Tk()
+        ventanaCodigo.geometry()
+        ventanaCodigo.title('Código')
+        ventanaCodigo.iconbitmap('icon/asm.ico')
+        labelTituloCodigo = Label(ventanaCodigo, text='El código tiene el siguiente contenido: ', font='terminal',fg="blue")
+        labelTituloCodigo.pack(side=TOP)
+
+        textCodigo = Text(ventanaCodigo, font='terminal', height=100, width=100)
+        scrollbarCodigo = Scrollbar(ventanaCodigo, command=textCodigo.yview())
+        scrollbarCodigo.pack(side=RIGHT)
+
+        textCodigo.insert(END, content)
+        textCodigo.configure(state='disabled')  # SOLO LECTURA
+        textCodigo.pack(side=LEFT)
+
         listaElementos = separarElementos(content)
         stringElementos = ''
         for i in listaElementos:
@@ -34,7 +54,7 @@ def open_file():
 
         textoElementos = ''
         textoTotal = ''
-        for i in listaElementos:
+        for i in listaElementos:  # recorrido analizador de cada una de las palabras
             palabra = str(i)
             palabra2 = listaElementos[listaElementos.index(palabra) + 1]
             newtextRegistros = palabra[0:2]
@@ -45,46 +65,69 @@ def open_file():
             if (palabra in instrucciones) or (palabra in (i.lower() for i in
                                                           instrucciones)):  # Hace recorrido para todos los elementos de la lista registros en minuscula
                 textoTotal += (palabra + '------> Es Instrucción' + '\n')
+            if validarSimbolo(palabra):
+                textoTotal += (palabra + '------> Es Simbolo' + '\n')
             if palabra2 == 'segment':
                 textoElementos += (palabra + ' ' + palabra2 + '\n')
+
+
             else:
 
                 if validarComentario(palabra) and palabra != 'segment':
                     textoElementos += (palabra + '\n')
 
+
                 else:
                     pass
-
-        ventanaElementos = Tk()
-        ventanaElementos.geometry()
-        ventanaElementos.title('Elementos')
-        ventanaElementos.iconbitmap('icon/asm.ico')
-
-        labelTitulo = Label(ventanaElementos, text='El programa tiene los siguientes elementos:', fg="blue")
-        labelTitulo.pack(side=TOP)
-
-        textElementos = Text(ventanaElementos, height=50, width=30)
-        scrollbar = Scrollbar(ventanaElementos, command=textElementos.yview())
-        scrollbar.pack(side=RIGHT)
-
-        textElementos.insert(END, textoElementos)
-        textElementos.configure(state='disabled')  # SOLO LECTURA
-        textElementos.pack(side=LEFT)
-
-        ventanaIdentificacion = Tk()  # Ventana que se desplegará para mostrar la identificación de los elementos
-        ventanaIdentificacion.geometry()
-        ventanaIdentificacion.title('Identificación de elementos')
-        ventanaIdentificacion.iconbitmap('icon/asm.ico')
-
-        labelTituloIdentificacion = Label(ventanaIdentificacion,
-                                          text='Los elementos del programa tienen las siguiente clasificación: '
-                                               '                                                               ',
-                                          fg='black')
-        labelIdentificacion = Label(ventanaIdentificacion, text=textoTotal, fg="blue")
-        labelTituloIdentificacion.pack(side=TOP)
-        labelIdentificacion.pack(side=BOTTOM)
+        # a = windowElementos(textoElementos)
+        botonCodigo = Button(ventanaCodigo, text=' Separar Elementos  ', font='terminal', background='green',
+                             command=lambda: windowElementosIdentificacion(textoElementos, textoTotal))
+        botonCodigo.pack(side=RIGHT)
+        windowIdentificacion(textoTotal)
 
 
+
+def windowElementosIdentificacion(contenido, contenido2):
+    ventanaElementos = Tk()
+    ventanaElementos.geometry()
+    ventanaElementos.title('Elementos')
+    ventanaElementos.iconbitmap('icon/asm.ico')
+
+    labelTitulo = Label(ventanaElementos, text='El programa tiene los siguientes elementos:', font='terminal',fg="blue")
+    labelTitulo.pack(side=TOP)
+
+    textElementos = Text(ventanaElementos, font='terminal', height=50, width=40)
+    scrollbar = Scrollbar(ventanaElementos, command=textElementos.yview())
+    scrollbar.pack(side=RIGHT)
+
+    textElementos.insert(END, contenido)
+    textElementos.configure(state='disabled')  # SOLO LECTURA
+    textElementos.pack(side=LEFT)
+
+    ventanaIdentificacion = Tk()
+    ventanaIdentificacion.geometry()
+    ventanaIdentificacion.title('Identificación de elementos')
+    ventanaIdentificacion.iconbitmap('icon/asm.ico')
+
+    labelTituloIdentificacion = Label(ventanaIdentificacion,
+                                      text='Los elementos del programa tienen las siguiente clasificación: '
+                                           '                                                               ',
+                                      font='terminal',
+                                      fg='black')
+    labelTituloIdentificacion.pack(side=TOP)
+
+    textIdentificación = Text(ventanaIdentificacion, font='terminal', height=50, width=30, foreground='blue')
+    scrollbarIdentificacion = Scrollbar(ventanaIdentificacion, command=textIdentificación.yview())
+    scrollbarIdentificacion.pack(side=RIGHT)
+
+    textIdentificación.insert(END, contenido2)
+    textIdentificación.configure(state='disabled')  # SOLO LECTURA
+    textIdentificación.pack(side=LEFT)
+
+
+def windowIdentificacion(contenido):
+    # Ventana que se desplegará para mostrar la identificación de los elementos
+    pass
 
 
 def validarSegmento(string1, string2):
@@ -101,6 +144,11 @@ def validarRegistro(listaRegistros, string):
 
 def validarComentario(string):
     if not string.startswith(';'):
+        return True
+
+
+def validarSimbolo(string):  # Solo etiquetas
+    if string.endswith(':'):
         return True
 
 
@@ -126,16 +174,16 @@ class Vista:
         self.root.geometry(geometry)  # sizexsize
         self.root.iconbitmap(icon)
 
-        label = Label(self.root, text="Explorador de Archivos", width=100, height=4, fg="black")
+        label = Label(self.root, text="Analizador Lexicográfico", font='Fixedsys', width=100, height=4, fg="black")
         label.pack()
 
-        btn = Button(self.root, text='Abrir Archivo', background="green", command=lambda: open_file())
+        btn = Button(self.root, text='Abrir Archivo', font='Fixedsys', background="green", command=lambda: open_file())
         btn.pack()
 
-        btn2 = Button(self.root, text='   Salir    ', background="red", command=lambda: exit())
+        btn2 = Button(self.root, text='   Salir    ', font='Fixedsys', background="red", command=lambda: exit())
         btn2.pack()
 
-        label3 = Label(self.root, text="Equipo 1 2022-A", width=100, height=4, fg="black")
+        label3 = Label(self.root, text="Equipo 1 2022-A", font='Fixedsys', width=100, height=4, fg="black")
         label3.pack(side=BOTTOM)
 
         self.root.mainloop()

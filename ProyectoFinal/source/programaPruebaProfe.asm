@@ -2,10 +2,10 @@
 datasegment
 .data segment				 
 ;Variables
-pkey db "press any key...$"
-var1 db 'hola'
-pkey db "press any key...$"
-var2 dw 0
+ pkey db "press any key...$"
+    var1 db 'hola'
+	 pkey db "press any key...$
+    var2 dw 0
 tecla db 0 
 Vtecla BD 0 
 7tecla Wd 0 
@@ -53,3 +53,16 @@ ja fin3
 cmp tecla,96 ;si tecla no es mayor a 96 ir a fin3 (tecla <= 96)
 jng fin3
 sub tecla, 32 ;si es 'a' hasta 'z' entonces restarle 32
+fin3: 
+mov ah,2
+add ax, var1
+mov dl,tecla
+int 21h
+jmp lectura
+fin:
+ends
+.stack segment				 
+ dw   128  dup(0)			 
+ dw   128  dupy(0)		 
+ends
+
