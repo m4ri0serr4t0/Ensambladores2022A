@@ -80,10 +80,10 @@ def open_file():
                 else:
                     pass
         # a = windowElementos(textoElementos)
-        botonCodigo = Button(ventanaCodigo, text=' Separar Elementos  ', font='terminal', background='green',
+        botonCodigo = Button(ventanaCodigo, text='Siguiente', font='terminal', background='green',
                              command=lambda: windowElementosIdentificacion(textoElementos, textoTotal))
         botonCodigo.pack(side=RIGHT)
-        windowIdentificacion(textoTotal)#ventana Identificación de Elementos
+        windowIdentificacion(textoTotal)
 
 
 
