@@ -89,7 +89,7 @@ def open_file():
 
 def windowElementosIdentificacion(contenido, contenido2):
     ventanaElementos = Tk()
-    ventanaElementos.geometry()
+    ventanaElementos.geometry('700x700')
     ventanaElementos.title('Elementos')
     ventanaElementos.iconbitmap('icon/asm.ico')
 
