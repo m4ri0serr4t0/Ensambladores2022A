@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import messagebox
 from tkinter.filedialog import askopenfile
 
-from ProyectoFinal.source.modelo.Registro import Registro
+
 
 # Definiendo el conjunto de registros que tiene un 8086
 registers = ['AX', 'AH', 'AL',
@@ -12,6 +12,7 @@ registers = ['AX', 'AH', 'AL',
              'CS', 'DS', 'ES',
              'BP', 'SP', 'SI', 'DI'
              ]
+
 # Definiendo las instrucciones asignadas
 
 instrucciones = ['AAA', 'MOVSB', 'CLD', 'PUSHF', 'DAA',
@@ -35,7 +36,7 @@ def open_file():
         ventanaCodigo = Tk()
         ventanaCodigo.geometry()
         ventanaCodigo.title('Código')
-        ventanaCodigo.iconbitmap('icon/asm.ico')
+        #ventanaCodigo.iconbitmap('asm.ico')
         labelTituloCodigo = Label(ventanaCodigo, text='El código tiene el siguiente contenido: ', font='terminal',fg="blue")
         labelTituloCodigo.pack(side=TOP)
 
@@ -91,7 +92,7 @@ def windowElementosIdentificacion(contenido, contenido2):
     ventanaElementos = Tk()
     ventanaElementos.geometry('700x700')
     ventanaElementos.title('Elementos')
-    ventanaElementos.iconbitmap('icon/asm.ico')
+    #ventanaElementos.iconbitmap('asm.ico')
 
     labelTitulo = Label(ventanaElementos, text='El programa tiene los siguientes elementos:', font='terminal',fg="blue")
     labelTitulo.pack(side=TOP)
@@ -107,7 +108,7 @@ def windowElementosIdentificacion(contenido, contenido2):
     ventanaIdentificacion = Tk()
     ventanaIdentificacion.geometry()
     ventanaIdentificacion.title('Identificación de elementos')
-    ventanaIdentificacion.iconbitmap('icon/asm.ico')
+    #ventanaIdentificacion.iconbitmap('asm.ico')
 
     labelTituloIdentificacion = Label(ventanaIdentificacion,
                                       text='Los elementos del programa tienen las siguiente clasificación: '
@@ -152,9 +153,7 @@ def validarSimbolo(string):  # Solo etiquetas
         return True
 
 
-def validarRegistros(string):
-    r = Registro()
-    registers = r.registros()
+
 
 
 def separarElementos(lista):
@@ -168,11 +167,11 @@ def mostrarAdvertencia():
 
 class Vista:
 
-    def __init__(self, root, title, geometry, icon):
+    def __init__(self, root, title, geometry):
         self.root = root
         self.root.title(title)
         self.root.geometry(geometry)  # sizexsize
-        self.root.iconbitmap(icon)
+        #self.root.iconbitmap(icon)
 
         label = Label(self.root, text="Analizador Lexicográfico", font='Fixedsys', width=100, height=4, fg="black")
         label.pack()
@@ -187,3 +186,11 @@ class Vista:
         label3.pack(side=BOTTOM)
 
         self.root.mainloop()
+
+
+#_rutaIcono = 'asm.ico'
+if __name__ == '__main__':
+    root = Tk()
+    vista = Vista(root, 'Analizador Lexicográfico', '600x200')
+
+
