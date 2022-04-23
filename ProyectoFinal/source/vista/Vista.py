@@ -1,8 +1,7 @@
 from tkinter import *
 from tkinter import messagebox
 from tkinter.filedialog import askopenfile
-
-
+import re
 
 # Definiendo el conjunto de registros que tiene un 8086
 registers = ['AX', 'AH', 'AL',
@@ -12,7 +11,6 @@ registers = ['AX', 'AH', 'AL',
              'CS', 'DS', 'ES',
              'BP', 'SP', 'SI', 'DI'
              ]
-
 # Definiendo las instrucciones asignadas
 
 instrucciones = ['AAA', 'MOVSB', 'CLD', 'PUSHF', 'DAA',
@@ -36,7 +34,7 @@ def open_file():
         ventanaCodigo = Tk()
         ventanaCodigo.geometry()
         ventanaCodigo.title('Código')
-        #ventanaCodigo.iconbitmap('asm.ico')
+        ventanaCodigo.iconbitmap('icon/asm.ico')
         labelTituloCodigo = Label(ventanaCodigo, text='El código tiene el siguiente contenido: ', font='terminal',fg="blue")
         labelTituloCodigo.pack(side=TOP)
 
@@ -92,7 +90,7 @@ def windowElementosIdentificacion(contenido, contenido2):
     ventanaElementos = Tk()
     ventanaElementos.geometry('700x700')
     ventanaElementos.title('Elementos')
-    #ventanaElementos.iconbitmap('asm.ico')
+    ventanaElementos.iconbitmap('icon/asm.ico')
 
     labelTitulo = Label(ventanaElementos, text='El programa tiene los siguientes elementos:', font='terminal',fg="blue")
     labelTitulo.pack(side=TOP)
@@ -108,7 +106,7 @@ def windowElementosIdentificacion(contenido, contenido2):
     ventanaIdentificacion = Tk()
     ventanaIdentificacion.geometry()
     ventanaIdentificacion.title('Identificación de elementos')
-    #ventanaIdentificacion.iconbitmap('asm.ico')
+    ventanaIdentificacion.iconbitmap('icon/asm.ico')
 
     labelTituloIdentificacion = Label(ventanaIdentificacion,
                                       text='Los elementos del programa tienen las siguiente clasificación: '
@@ -144,6 +142,7 @@ def validarRegistro(listaRegistros, string):
 
 
 def validarComentario(string):
+
     if not string.startswith(';'):
         return True
 
@@ -153,11 +152,12 @@ def validarSimbolo(string):  # Solo etiquetas
         return True
 
 
-
+def validarRegistros(string):
+   pass
 
 
 def separarElementos(lista):
-    new_list = lista.split()
+    new_list = lista.split(r'[;,\s]\s*')
     return new_list
 
 
@@ -187,10 +187,7 @@ class Vista:
 
         self.root.mainloop()
 
-
 #_rutaIcono = 'asm.ico'
 if __name__ == '__main__':
     root = Tk()
-    vista = Vista(root, 'Analizador Lexicográfico', '600x200')
-
-
+    vista = Vista(root, 'Analizador Lexicografico', '600x200')
