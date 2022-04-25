@@ -132,7 +132,8 @@ def open_file():
 
             if palabra not in reservadas and (validarSimbolo(palabra) == False):
                 textoTotal += (palabra + '------> Elemento Invalido' + '\n')
-
+            #if validadConstantesCaracter(palabra):
+                #textoTotal += (palabra + '------> Constante Caracter' + '\n')
 
 
 
