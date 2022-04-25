@@ -1,4 +1,4 @@
-.data segment				 
+.data segment, a				 
 datasegment
 .data segment				 
 ;Variables

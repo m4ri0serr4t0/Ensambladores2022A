@@ -23,7 +23,7 @@ pseudoinstrucciones = ['.data segment', '.DATA SEGMENT', '.code segment'
                        'byte ptr', 'BYTE PTR', 'world ptr', 'WORLD PTR', 'db', 'DB', 'equ',
                        'EQU', '.code', '.CODE', '.stack', '.STACK', '.data', '.DATA'
                        ]
-
+ # lo hizo juan
 
 def open_file():
     """
@@ -54,31 +54,44 @@ def open_file():
         textCodigo.grid(row=1, column=1)
 
         listaElementos = separarPalabras(content)
+        elements = []
         lineas = content.split('\n')
-        realLine = []
+        lineasSinComentario = []
         for x in lineas:
 
             posicionComentario = x.find(';')
-            if posicionComentario != -1:
-                lineaSinComentario = x[0:posicionComentario]
-                realLine.append(lineaSinComentario)
-
+            if posicionComentario == -1:
+                lineasSinComentario.append(x)
 
             else:
-                continue
+                linea = x[0:posicionComentario]
+                lineasSinComentario.append(linea)
 
-        for y in realLine:
-            print(y)
 
         stringElementos = ''
-        for i in listaElementos:
+        stringLineas = ''
+
+        for i in lineasSinComentario:
+            stringLineas == i + '\n'
+            print(i)
+
+        for j in lineasSinComentario:
+            lineaPalabras = j.split()
+            for z in lineaPalabras:
+                elements.append(z)
+
+
+        for i in elements:
             stringElementos += i + '\n'
 
         textoElementos = ''
         textoTotal = ''
-        for i in listaElementos:  # recorrido analizador de cada una de las palabras
+        for i in elements:
+
+            i.replace(',', ' ')# recorrido analizador de cada una de las palabras
+
             palabra = str(i)
-            palabra2 = listaElementos[listaElementos.index(palabra) + 1]
+            palabra2 = elements[elements.index(palabra) + 1]
             newtextRegistros = palabra[0:2]
             if (newtextRegistros in registers) or (newtextRegistros in (i.lower() for i in
                                                                         registers)):  # Hace recorrido para todos los elementos de la lista registros en minuscula
@@ -169,8 +182,7 @@ def validarComentario(string):
 def validarSimbolo(string):  # Solo etiquetas
     if string.endswith(':'):
         return True
-    if string not in instrucciones:
-        return True
+
 
 
 def validarRegistros(string):
@@ -195,7 +207,7 @@ class Vista:
         btn = Button(self.root, text='Abrir Archivo', font='Fixedsys', background="green", command=lambda: open_file())
         btn.pack()
 
-        btn2 = Button(self.root, text='   Salir    ', font='Fixedsys', background="red", command=lambda: exit())
+        btn2 = Button(self.root, text='   Salir    ', font='Fixedsys', background="red", command=lambda: self.root.destroy()) # lo hizo juan
         btn2.pack()
 
         label3 = Label(self.root, text="Equipo 1 2022-A", font='Fixedsys', width=100, height=4, fg="black")
