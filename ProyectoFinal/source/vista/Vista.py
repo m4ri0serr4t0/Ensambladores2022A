@@ -18,6 +18,12 @@ instrucciones = ['AAA', 'MOVSB', 'CLD', 'PUSHF', 'DAA',
                  'ADC', 'LES', 'SHL', 'ADD', 'JA',
                  'JNC', 'LOOPNE', 'JNAE', 'JZ', 'JLE']
 
+pseudoinstrucciones = ['.data segment', '.DATA SEGMENT', '.code segment'
+    , '.CODE SEGMENT', '.stack segment''.STACK SEGMENT', 'ends', 'ENDS',
+                       'byte ptr', 'BYTE PTR', 'world ptr', 'WORLD PTR', 'db', 'DB', 'equ',
+                       'EQU', '.code', '.CODE', '.stack', '.STACK', '.data', '.DATA'
+                       ]
+
 
 def open_file():
     """
@@ -34,19 +40,35 @@ def open_file():
         ventanaCodigo = Tk()
         ventanaCodigo.geometry()
         ventanaCodigo.title('Código')
-        ventanaCodigo.iconbitmap('icon/asm.ico')
-        labelTituloCodigo = Label(ventanaCodigo, text='El código tiene el siguiente contenido: ', font='terminal',fg="blue")
-        labelTituloCodigo.pack(side=TOP)
+
+        labelTituloCodigo = Label(ventanaCodigo, text='El código tiene el siguiente contenido: ', font='terminal',
+                                  fg="blue")
+        labelTituloCodigo.grid(row=0, column=1)
 
         textCodigo = Text(ventanaCodigo, font='terminal', height=100, width=100)
-        scrollbarCodigo = Scrollbar(ventanaCodigo, command=textCodigo.yview())
-        scrollbarCodigo.pack(side=RIGHT)
+        # scrollbarCodigo = Scrollbar(ventanaCodigo, command=textCodigo.yview())
+        # scrollbarCodigo.grid(row=1, column=3)
 
         textCodigo.insert(END, content)
         textCodigo.configure(state='disabled')  # SOLO LECTURA
-        textCodigo.pack(side=LEFT)
+        textCodigo.grid(row=1, column=1)
 
         listaElementos = separarPalabras(content)
+        lineas = content.split('\n')
+        realLine = []
+        for x in lineas:
+
+            posicionComentario = x.find(';')
+            if posicionComentario != -1:
+                lineaSinComentario = x[0:posicionComentario]
+                realLine.append(lineaSinComentario)
+
+
+            else:
+                continue
+
+        for y in realLine:
+            print(y)
 
         stringElementos = ''
         for i in listaElementos:
@@ -82,9 +104,12 @@ def open_file():
         # a = windowElementos(textoElementos)
         botonCodigo = Button(ventanaCodigo, text='Siguiente', font='terminal', background='green',
                              command=lambda: windowElementosIdentificacion(textoElementos, textoTotal))
-        botonCodigo.pack(side=RIGHT)
+        botonCodigo.grid(row=1, column=2)
 
 
+# def mostrarCodigo(content):
+
+# def agregarBotonIdentificarElementos(ventana, elementos, total):
 
 
 def windowElementosIdentificacion(contenido, contenido2):
@@ -93,7 +118,8 @@ def windowElementosIdentificacion(contenido, contenido2):
     ventanaElementos.title('Elementos')
     ventanaElementos.iconbitmap('icon/asm.ico')
 
-    labelTitulo = Label(ventanaElementos, text='El programa tiene los siguientes elementos:', font='terminal',fg="blue")
+    labelTitulo = Label(ventanaElementos, text='El programa tiene los siguientes elementos:', font='terminal',
+                        fg="blue")
     labelTitulo.pack(side=TOP)
 
     textElementos = Text(ventanaElementos, font='terminal', height=50, width=40)
@@ -125,11 +151,9 @@ def windowElementosIdentificacion(contenido, contenido2):
     textIdentificación.pack(side=LEFT)
 
 
-
-
-def separarPalabras(codigo):
-    lista = list(codigo.split())
-    return lista
+def separarPalabras(lista):
+    new_lista = lista.split()
+    return new_lista
 
 
 def validarSegmento(string1, string2):
@@ -137,11 +161,7 @@ def validarSegmento(string1, string2):
         return True
 
 
-
-
-
 def validarComentario(string):
-
     if not string.startswith(';'):
         return True
 
@@ -149,12 +169,12 @@ def validarComentario(string):
 def validarSimbolo(string):  # Solo etiquetas
     if string.endswith(':'):
         return True
+    if string not in instrucciones:
+        return True
 
 
 def validarRegistros(string):
-   pass
-
-
+    pass
 
 
 def mostrarAdvertencia():
@@ -167,7 +187,7 @@ class Vista:
         self.root = root
         self.root.title(title)
         self.root.geometry(geometry)  # sizexsize
-        #self.root.iconbitmap(icon)
+        # self.root.iconbitmap(icon)
 
         label = Label(self.root, text="Analizador Lexicográfico", font='Fixedsys', width=100, height=4, fg="black")
         label.pack()
@@ -183,7 +203,8 @@ class Vista:
 
         self.root.mainloop()
 
-#_rutaIcono = 'asm.ico'
+
+# _rutaIcono = 'asm.ico'
 if __name__ == '__main__':
     root = Tk()
     vista = Vista(root, 'Analizador Lexicografico', '600x200')
