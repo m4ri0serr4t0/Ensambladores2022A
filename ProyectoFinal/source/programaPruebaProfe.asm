@@ -1,4 +1,4 @@
-.data segment, a				 
+.data segment				 
 datasegment
 .data segment				 
 ;Variables
@@ -6,7 +6,7 @@ datasegment
     var1 db 'hola'
 	 pkey db "press any key...$
     var2 dw 0
-tecla db 0 
+tecla db 10000000000111B 
 Vtecla BD 0 
 7tecla Wd 0 
 tecla db 0 

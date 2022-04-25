@@ -23,7 +23,9 @@ pseudoinstrucciones = ['.data segment', '.DATA SEGMENT', '.code segment'
                        'byte ptr', 'BYTE PTR', 'world ptr', 'WORLD PTR', 'db', 'DB', 'equ',
                        'EQU', '.code', '.CODE', '.stack', '.STACK', '.data', '.DATA'
                        ]
- # lo hizo juan
+
+
+# lo hizo juan
 
 def open_file():
     """
@@ -67,7 +69,6 @@ def open_file():
                 linea = x[0:posicionComentario]
                 lineasSinComentario.append(linea)
 
-
         stringElementos = ''
         stringLineas = ''
 
@@ -75,10 +76,13 @@ def open_file():
             stringLineas == i + '\n'
             print(i)
 
+
         for j in lineasSinComentario:
             lineaPalabras = j.split()
+
             for z in lineaPalabras:
                 elements.append(z)
+
 
 
         for i in elements:
@@ -86,9 +90,19 @@ def open_file():
 
         textoElementos = ''
         textoTotal = ''
+
+        constanteCaracter=[]
+
+        for a in lineasSinComentario:
+            constante = validadConstantesCaracter(a)
+            constanteCaracter.append(constante)
+            if constante != None:
+                print(constante)
+
+
         for i in elements:
 
-            i.replace(',', ' ')# recorrido analizador de cada una de las palabras
+            i.replace(',', '')  # recorrido analizador de cada una de las palabras
 
             palabra = str(i)
             palabra2 = elements[elements.index(palabra) + 1]
@@ -99,7 +113,14 @@ def open_file():
 
             if (palabra in instrucciones) or (palabra in (i.lower() for i in
                                                           instrucciones)):  # Hace recorrido para todos los elementos de la lista registros en minuscula
-                textoTotal += (palabra + '------> Es Instrucción' + '\n')
+                textoTotal += (palabra + '  ------> Es Instruccion' + '\n')
+            if (palabra.isdigit()):
+                textoTotal += (palabra+ '  ------> Es Constante Numerica Decimal'+ '\n')
+            if (palabra.endswith('H') or palabra.endswith('h')):
+                textoTotal += (palabra+ '  ------> Es Constante Numerica Hexadecimal' + '\n')
+            if (validaBinario(palabra)):
+                textoTotal += (palabra + '  ------> Es Constante Numerica Binaria' + '\n')
+
             if validarSimbolo(palabra):
                 textoTotal += (palabra + '------> Es Simbolo' + '\n')
             if palabra2 == 'segment':
@@ -114,10 +135,11 @@ def open_file():
 
                 else:
                     pass
+
         # a = windowElementos(textoElementos)
         botonCodigo = Button(ventanaCodigo, text='Siguiente', font='terminal', background='green',
                              command=lambda: windowElementosIdentificacion(textoElementos, textoTotal))
-        botonCodigo.grid(row=1, column=2)
+        botonCodigo.grid(row=0, column=2)
 
 
 # def mostrarCodigo(content):
@@ -129,7 +151,7 @@ def windowElementosIdentificacion(contenido, contenido2):
     ventanaElementos = Tk()
     ventanaElementos.geometry('700x700')
     ventanaElementos.title('Elementos')
-    ventanaElementos.iconbitmap('icon/asm.ico')
+    #ventanaElementos.iconbitmap('icon/asm.ico')
 
     labelTitulo = Label(ventanaElementos, text='El programa tiene los siguientes elementos:', font='terminal',
                         fg="blue")
@@ -155,7 +177,7 @@ def windowElementosIdentificacion(contenido, contenido2):
                                       fg='black')
     labelTituloIdentificacion.pack(side=TOP)
 
-    textIdentificación = Text(ventanaIdentificacion, font='terminal', height=50, width=30, foreground='blue')
+    textIdentificación = Text(ventanaIdentificacion, font='terminal', height=100, width=80, foreground='blue')
     scrollbarIdentificacion = Scrollbar(ventanaIdentificacion, command=textIdentificación.yview())
     scrollbarIdentificacion.pack(side=RIGHT)
 
@@ -173,6 +195,34 @@ def validarSegmento(string1, string2):
     if string1.startswith('.') and string2.startswith('segment'):
         return True
 
+def validadConstantesCaracter(linea):
+    indexComilla = linea.find('"')
+    if indexComilla == -1:
+        pass
+    else:
+        constante = linea[indexComilla:]
+        return constante
+
+
+def validaBinario(string):
+    # set function convert string
+    # into set of characters .
+    p = set(string)
+
+    # declare set of '0', '1' .
+    s = {'0', '1'}
+
+    # check set p is same as set s
+    # or set p contains only '0'
+    # or set p contains only '1'
+    # or not, if any one condition
+    # is true then string is accepted
+    # otherwise not .
+    if len(string) >= 2 and (s == p or p == {'0'} or p == {'1'}) and (string.endswith('B') or string.endswith('b')):
+        return True
+    else:
+        return False
+
 
 def validarComentario(string):
     if not string.startswith(';'):
@@ -182,7 +232,6 @@ def validarComentario(string):
 def validarSimbolo(string):  # Solo etiquetas
     if string.endswith(':'):
         return True
-
 
 
 def validarRegistros(string):
@@ -207,7 +256,8 @@ class Vista:
         btn = Button(self.root, text='Abrir Archivo', font='Fixedsys', background="green", command=lambda: open_file())
         btn.pack()
 
-        btn2 = Button(self.root, text='   Salir    ', font='Fixedsys', background="red", command=lambda: self.root.destroy()) # lo hizo juan
+        btn2 = Button(self.root, text='   Salir    ', font='Fixedsys', background="red",
+                      command=lambda: self.root.destroy())  # lo hizo juan
         btn2.pack()
 
         label3 = Label(self.root, text="Equipo 1 2022-A", font='Fixedsys', width=100, height=4, fg="black")
