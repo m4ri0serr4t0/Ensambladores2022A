@@ -46,7 +46,8 @@ def open_file():
         textCodigo.configure(state='disabled')  # SOLO LECTURA
         textCodigo.pack(side=LEFT)
 
-        listaElementos = separarElementos(content)
+        listaElementos = separarPalabras(content)
+
         stringElementos = ''
         for i in listaElementos:
             stringElementos += i + '\n'
@@ -82,7 +83,7 @@ def open_file():
         botonCodigo = Button(ventanaCodigo, text='Siguiente', font='terminal', background='green',
                              command=lambda: windowElementosIdentificacion(textoElementos, textoTotal))
         botonCodigo.pack(side=RIGHT)
-        windowIdentificacion(textoTotal)
+
 
 
 
@@ -124,9 +125,11 @@ def windowElementosIdentificacion(contenido, contenido2):
     textIdentificación.pack(side=LEFT)
 
 
-def windowIdentificacion(contenido):
-    # Ventana que se desplegará para mostrar la identificación de los elementos
-    pass
+
+
+def separarPalabras(codigo):
+    lista = list(codigo.split())
+    return lista
 
 
 def validarSegmento(string1, string2):
@@ -134,11 +137,7 @@ def validarSegmento(string1, string2):
         return True
 
 
-def validarRegistro(listaRegistros, string):
-    if string.startswith('AX'):
-        listaRegistros.append(string)
-    if string.startswith('BX'):
-        listaRegistros.append(string)
+
 
 
 def validarComentario(string):
@@ -156,9 +155,6 @@ def validarRegistros(string):
    pass
 
 
-def separarElementos(lista):
-    new_list = lista.split(r'[;,\s]\s*')
-    return new_list
 
 
 def mostrarAdvertencia():

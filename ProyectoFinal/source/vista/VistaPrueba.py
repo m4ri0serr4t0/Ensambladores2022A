@@ -2,6 +2,17 @@ from tkinter import *
 from tkinter import messagebox
 from tkinter.filedialog import askopenfile
 import re
+import ply.lex as lex
+
+#lex.py se utiliza para dividir una cadena de entrada.
+tokens = [
+    'PSEUDOINSTRUCCIONES',
+    'INSTRUCCIONES',
+    'SIMBOLO',
+    'REGISTRO',
+    'CONSTANTE_NUMERICA_DECIMAL',
+    'CONSTANTE_NUMERICA_HEXADECIMAL',
+    'CONSTANTE_NUMERICA_BINARIA']
 
 # Definiendo el conjunto de registros que tiene un 8086
 registers = ['AX', 'AH', 'AL',
@@ -18,8 +29,7 @@ instrucciones = ['AAA', 'MOVSB', 'CLD', 'PUSHF', 'DAA',
                  'ADC', 'LES', 'SHL', 'ADD', 'JA',
                  'JNC', 'LOOPNE', 'JNAE', 'JZ', 'JLE']
 
-
-
+segmentos = ['.data segment', '.stack segment', '.code segment']
 
 def open_file():
     file = askopenfile(mode='r',
@@ -27,34 +37,81 @@ def open_file():
     if file is None:  # Si el usuario no selecciona algún archivo
         mostrarAdvertencia()  # Muestra advertencia
     else:
-        dataFlag = False
-
         content = file.read()  # Lee el contenido del archivo
-        lineas = re.split(r'[\n]+', content)
-        contador = 0
-        elementos=[]
-
-        for line in lineas:
-            contador += 1
-            print("linea#", contador, "\n", line)
-            tokens = line.split(" ")
-            print("Tokens are ", tokens)
-            print("Line#", contador, "properties \n")
-            for token in tokens:
-                if token in registers or token.upper() in registers:
-                    print("Registro son  ", token)
-
-        dataFlag = False
-        print("_ _ _ _ _ _ _ _ _ _ _ _ _ _ _  _")
+        mostrarCodigo(content)
+        segments=[]
+        lineas = content.split('\n')
+        for i in lineas:
+            for j in segmentos:
+                if re.search(j, i):
+                    segments.append(j)
+        print(segments)
 
 
-def validarComentario(string):
+
+
+
+
+def t_REGISTRO(t):
+    r'[a-zA-Z]{2}'
+    if t.value or t.value.upper() in registers:
+        # .type = t.value
+        return t
+
+
+def t_INSTRUCCIONES(t):
+    r'[a-zA-Z]*'
+    if t.value or t.value.upper() in instrucciones:
+        t.type = t.value
+        return t
+
+
+def t_COMENTARIO(t):
     r'\;.*'
-    return string
+    return t
+
+
+def t_SIMBOLO(t):
+    pass
+
+
+def t_CONSTANTE_NUMERICA_DECIMAL(t):
+    r'\d+'
+    t.value = int(t.value)
+    return t
+
+
+def t_CONSTANTE_NUMERICA_HEXADECIMAL(t):
+    r'[0-9A-Fa-f][0-9A-Fa-f]*'
+    return t
 
 
 def mostrarAdvertencia():
     messagebox.showwarning("Advertencia", "Selecciona un archivo")
+
+
+def mostrarCodigo(content):
+    ventanaCodigo = Tk()
+    ventanaCodigo.geometry()
+    ventanaCodigo.title('Código')
+    ventanaCodigo.iconbitmap('icon/asm.ico')
+    labelTituloCodigo = Label(ventanaCodigo, text='El código tiene el siguiente contenido: ', font='terminal',
+                              fg="blue")
+    labelTituloCodigo.grid(row=0, column=1)
+
+    textCodigo = Text(ventanaCodigo, font='terminal', height=100, width=100)
+    # scrollbarCodigo = Scrollbar(ventanaCodigo, command=textCodigo.yview())
+    # scrollbarCodigo.grid(row=1, column=3)
+
+    textCodigo.insert(END, content)
+    textCodigo.configure(state='disabled')  # SOLO LECTURA
+    textCodigo.grid(row=1, column=1)
+
+    btn = Button(ventanaCodigo, text='Mostrar Elementos', font='Terminal', background="green", command=lambda: None)
+    btn.grid(row=1, column=2)
+
+    btn2 = Button(ventanaCodigo, text='Identificar Elementos', font='Terminal', background="red", command=lambda: None)
+    btn2.grid(row=1, column=3)
 
 
 class Vista:
