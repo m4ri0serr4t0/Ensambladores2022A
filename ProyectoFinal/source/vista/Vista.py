@@ -18,11 +18,13 @@ instrucciones = ['AAA', 'MOVSB', 'CLD', 'PUSHF', 'DAA',
                  'ADC', 'LES', 'SHL', 'ADD', 'JA',
                  'JNC', 'LOOPNE', 'JNAE', 'JZ', 'JLE']
 
-pseudoinstrucciones = ['.data segment', '.DATA SEGMENT', '.code segment'
-    , '.CODE SEGMENT', '.stack segment''.STACK SEGMENT', 'ends', 'ENDS',
-                       'byte ptr', 'BYTE PTR', 'world ptr', 'WORLD PTR', 'db', 'DB', 'equ',
-                       'EQU', '.code', '.CODE', '.stack', '.STACK', '.data', '.DATA'
+pseudoinstrucciones = ['.data segment', '.DATA SEGMENT', '.code segment',
+                       '.CODE SEGMENT', '.stack segment''.STACK SEGMENT', 'ends', 'ENDS',
+                       'byte ptr', 'BYTE PTR', 'world ptr', 'WORLD PTR', 'db', 'DB', 'dw', 'DW', 'equ',
+                       'EQU'
                        ]
+
+reservadas = registers + instrucciones + pseudoinstrucciones
 
 
 # lo hizo juan
@@ -45,15 +47,15 @@ def open_file():
 
         labelTituloCodigo = Label(ventanaCodigo, text='El código tiene el siguiente contenido: ', font='terminal',
                                   fg="blue")
-        labelTituloCodigo.grid(row=0, column=1)
+        labelTituloCodigo.pack(side=TOP)
 
         textCodigo = Text(ventanaCodigo, font='terminal', height=100, width=100)
         # scrollbarCodigo = Scrollbar(ventanaCodigo, command=textCodigo.yview())
-        # scrollbarCodigo.grid(row=1, column=3)
+        # scrollbarCodigo
 
         textCodigo.insert(END, content)
         textCodigo.configure(state='disabled')  # SOLO LECTURA
-        textCodigo.grid(row=1, column=1)
+        textCodigo.pack(side=LEFT)
 
         listaElementos = separarPalabras(content)
         elements = []
@@ -76,14 +78,11 @@ def open_file():
             stringLineas == i + '\n'
             print(i)
 
-
         for j in lineasSinComentario:
-            lineaPalabras = j.split()
+            lineaPalabras = re.split(r'[,\s]\s*', j)
 
             for z in lineaPalabras:
                 elements.append(z)
-
-
 
         for i in elements:
             stringElementos += i + '\n'
@@ -91,7 +90,7 @@ def open_file():
         textoElementos = ''
         textoTotal = ''
 
-        constanteCaracter=[]
+        constanteCaracter = []
 
         for a in lineasSinComentario:
             constante = validadConstantesCaracter(a)
@@ -99,10 +98,7 @@ def open_file():
             if constante != None:
                 print(constante)
 
-
         for i in elements:
-
-            i.replace(',', '')  # recorrido analizador de cada una de las palabras
 
             palabra = str(i)
             palabra2 = elements[elements.index(palabra) + 1]
@@ -114,32 +110,44 @@ def open_file():
             if (palabra in instrucciones) or (palabra in (i.lower() for i in
                                                           instrucciones)):  # Hace recorrido para todos los elementos de la lista registros en minuscula
                 textoTotal += (palabra + '  ------> Es Instruccion' + '\n')
+
             if (palabra.isdigit()):
-                textoTotal += (palabra+ '  ------> Es Constante Numerica Decimal'+ '\n')
+                textoTotal += (palabra + '  ------> Es Constante Numerica Decimal' + '\n')
+
             if (palabra.endswith('H') or palabra.endswith('h')):
-                textoTotal += (palabra+ '  ------> Es Constante Numerica Hexadecimal' + '\n')
+                textoTotal += (palabra + '  ------> Es Constante Numerica Hexadecimal' + '\n')
+
             if (validaBinario(palabra)):
                 textoTotal += (palabra + '  ------> Es Constante Numerica Binaria' + '\n')
 
             if validarSimbolo(palabra):
                 textoTotal += (palabra + '------> Es Simbolo' + '\n')
+
+            if palabra in pseudoinstrucciones:
+                textoTotal += (palabra + '  ------> Es Pseudoinstruccion' + '\n')
+
             if palabra2 == 'segment':
                 textoElementos += (palabra + ' ' + palabra2 + '\n')
+                textoTotal += (palabra + ' ' + palabra2 + '  ------> Es Pseudoinstruccion' + '\n')
+
+            if palabra not in reservadas and (validarSimbolo(palabra) == False):
+                textoTotal += (palabra + '------> Elemento Invalido' + '\n')
+
+
+
 
 
             else:
 
                 if validarComentario(palabra) and palabra != 'segment':
                     textoElementos += (palabra + '\n')
-
-
                 else:
                     pass
 
         # a = windowElementos(textoElementos)
-        botonCodigo = Button(ventanaCodigo, text='Siguiente', font='terminal', background='green',
+        botonCodigo = Button(ventanaCodigo, text='Identificar Elementos', font='terminal', background='green',
                              command=lambda: windowElementosIdentificacion(textoElementos, textoTotal))
-        botonCodigo.grid(row=0, column=2)
+        botonCodigo.pack(side=RIGHT)
 
 
 # def mostrarCodigo(content):
@@ -151,7 +159,7 @@ def windowElementosIdentificacion(contenido, contenido2):
     ventanaElementos = Tk()
     ventanaElementos.geometry('700x700')
     ventanaElementos.title('Elementos')
-    #ventanaElementos.iconbitmap('icon/asm.ico')
+    # ventanaElementos.iconbitmap('icon/asm.ico')
 
     labelTitulo = Label(ventanaElementos, text='El programa tiene los siguientes elementos:', font='terminal',
                         fg="blue")
@@ -194,6 +202,16 @@ def separarPalabras(lista):
 def validarSegmento(string1, string2):
     if string1.startswith('.') and string2.startswith('segment'):
         return True
+def buscarComillas(string, lista):
+    for i in lista:
+        indiceCreciente = lista.index(i+1)
+        if i.startswith('"'):
+            if lista[indiceCreciente].endswith('"'):
+                lista.append(lista[i]+' '+lista[indiceCreciente])
+        pass
+
+        posicionComilla1 = string.find('"')
+
 
 def validadConstantesCaracter(linea):
     indexComilla = linea.find('"')
@@ -209,16 +227,15 @@ def validaBinario(string):
     # into set of characters .
     p = set(string)
 
+    # check set p is same as set s
     # declare set of '0', '1' .
     s = {'0', '1'}
-
-    # check set p is same as set s
     # or set p contains only '0'
     # or set p contains only '1'
     # or not, if any one condition
     # is true then string is accepted
     # otherwise not .
-    if len(string) >= 2 and (s == p or p == {'0'} or p == {'1'}) and (string.endswith('B') or string.endswith('b')):
+    if (s == p or p == {'0'} or p == {'1'}) and (string.endswith('B') or string.endswith('b')):
         return True
     else:
         return False
