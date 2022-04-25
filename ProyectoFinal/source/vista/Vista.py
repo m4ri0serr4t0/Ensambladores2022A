@@ -223,6 +223,7 @@ def validaBinario(string):
     else:
         return False
 
+#comentario
 
 def validarComentario(string):
     if not string.startswith(';'):
