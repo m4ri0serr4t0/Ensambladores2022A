@@ -1,34 +1,25 @@
-string = 'comentario    ;'
-s = string.index(';')
-print(s)
-
-for i in listaElementos:
-    stringElementos += i + '\n'
-
-textoElementos = ''
-textoTotal = ''
-for i in listaElementos:  # recorrido analizador de cada una de las palabras
-    palabra = str(i)
-    palabra2 = listaElementos[listaElementos.index(palabra) + 1]
-    newtextRegistros = palabra[0:2]
-    if (newtextRegistros in registers) or (newtextRegistros in (i.lower() for i in
-                                                                registers)):  # Hace recorrido para todos los elementos de la lista registros en minuscula
-        textoTotal += (newtextRegistros + '  ------> Es Registro' + '\n')
-
-    if (palabra in instrucciones) or (palabra in (i.lower() for i in
-                                                  instrucciones)):  # Hace recorrido para todos los elementos de la lista registros en minuscula
-        textoTotal += (palabra + '------> Es Instrucción' + '\n')
-    if validarSimbolo(palabra):
-        textoTotal += (palabra + '------> Es Simbolo' + '\n')
-    if palabra2 == 'segment':
-        textoElementos += (palabra + ' ' + palabra2 + '\n')
+binario = '1010111B'
 
 
+def validaBinario(string):
+    # set function convert string
+    # into set of characters .
+    p = set(string)
+
+    # declare set of '0', '1' .
+    s = {'0', '1'}
+
+    # check set p is same as set s
+    # or set p contains only '0'
+    # or set p contains only '1'
+    # or not, if any one condition
+    # is true then string is accepted
+    # otherwise not .
+    if s == p or p == {'0'} or p == {'1'}:
+        print("Yes")
     else:
-
-        if validarComentario(palabra) and palabra != 'segment':
-            textoElementos += (palabra + '\n')
+        print("No")
 
 
-        else:
-            pass
+if __name__ == '__main__':
+    print(validaBinario(binario))

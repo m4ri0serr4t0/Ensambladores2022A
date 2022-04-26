@@ -138,12 +138,23 @@ def open_file():
                 textoTotal += (palabra + ' ' + palabra2 + '  ------> Pseudoinstruccion' + '\n')
 
             if palabra not in reservadas and (validarSimbolo(palabra) == False):
-                textoTotal += (palabra + '------> Elemento Invalido' + '\n')
+                textoTotal += (palabra + '  ------> Elemento Invalido' + '\n')
+
+            if validarDUP(palabra):
+                textoTotal += (palabra[:3] + '  ------> Pseudoinstruccion' + '\n')
+                constante = sacarConstanteDUP(palabra)
+                if constante.isdigit():
+                    textoTotal += (constante + '  ------> Constante Numerica Decimal' + '\n')
+                elif constante.endswith('H') or constante.endswith('h'):
+                    textoTotal += (constante + '  ------> Constante Numerica Hexadecimal' + '\n')
+                else:
+                    textoTotal += (constante + '  ------> Constante Numerica Binaria' + '\n')
+
+
+
+
             #if validadConstantesCaracter(palabra):
                 #textoTotal += (palabra + '------> Constante Caracter' + '\n')
-
-
-
 
             else:
 
@@ -201,12 +212,10 @@ def windowElementosIdentificacion(contenido, contenido2):
                                       fg='black')
     labelTituloIdentificacion.pack(side=TOP)
 
-    textIdentificación = Text(ventanaIdentificacion, font='terminal', height=100, width=80, foreground='blue')
-    scrollbarIdentificacion = Scrollbar(ventanaIdentificacion, command=textIdentificación.yview())
-    scrollbarIdentificacion.pack(side=RIGHT)
+
 
     scroll = tk.Scrollbar(ventanaIdentificacion)
-    textIdentificación = Text(ventanaIdentificacion, font='terminal', height=60, width=60)
+    textIdentificación = Text(ventanaIdentificacion, font='terminal', height=60, width=60, foreground='blue')
     scroll.pack(side=tk.RIGHT, fill=tk.Y)
     textIdentificación.pack(side=tk.LEFT, fill=tk.Y)
     scroll.config(command=textIdentificación.yview)
@@ -215,6 +224,23 @@ def windowElementosIdentificacion(contenido, contenido2):
     textIdentificación.insert(END, contenido2)
     textIdentificación.configure(state='disabled')  # SOLO LECTURA
     textIdentificación.pack(side=LEFT)
+
+
+
+def validarDUP(string):
+    if string.endswith(')') and (string.startswith('dup(') or string.startswith('DUP(')):
+        return True
+
+def sacarConstanteDUP(string):
+    if validarDUP(string):
+        indiceAbrir = (string.find('(')+1)
+        indiceCerrar = string.find(')')
+        constante = string[indiceAbrir:indiceCerrar]
+
+        return constante
+    else:
+        return None
+
 
 
 def separarPalabras(lista):
@@ -226,6 +252,8 @@ def separarPalabras(lista):
 def validarSegmento(string1, string2):
     if string1.startswith('.') and string2.startswith('segment'):
         return True
+
+
 def buscarComillas(string, lista):
     for i in lista:
         indiceCreciente = lista.index(i+1)

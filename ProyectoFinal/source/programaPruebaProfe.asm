@@ -1,4 +1,5 @@
-.data segment				 
+dup(1)
+.data segment  				 
 datasegment
 .data segment				 
 ;Variables
