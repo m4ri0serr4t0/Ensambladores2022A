@@ -180,7 +180,7 @@ def windowElementosIdentificacion(contenido, contenido2):
     scroll.config(command=textElementos.yview)
     textElementos.config(yscrollcommand=scroll.set)
 
-
+    #Hola
     #, command = textElementos.yview()
     #scrollbar = Scrollbar(ventanaElementos, command=textElementos.yview())
     #scrollbar.pack(side=RIGHT)
