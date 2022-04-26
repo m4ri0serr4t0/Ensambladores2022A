@@ -222,6 +222,7 @@ def separarPalabras(lista):
     return new_lista
 
 
+
 def validarSegmento(string1, string2):
     if string1.startswith('.') and string2.startswith('segment'):
         return True
