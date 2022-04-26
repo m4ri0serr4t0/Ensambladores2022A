@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import messagebox
 from tkinter.filedialog import askopenfile
 import re
+import tkinter as tk
 
 # Definiendo el conjunto de registros que tiene un 8086
 registers = ['AX', 'AH', 'AL',
@@ -52,6 +53,12 @@ def open_file():
         textCodigo = Text(ventanaCodigo, font='terminal', height=100, width=100)
         # scrollbarCodigo = Scrollbar(ventanaCodigo, command=textCodigo.yview())
         # scrollbarCodigo
+        scroll = tk.Scrollbar(ventanaCodigo)
+        textCodigo= Text(ventanaCodigo, font='terminal', height=50, width=40)
+        scroll.pack(side=tk.RIGHT, fill=tk.Y)
+        textCodigo.pack(side=tk.LEFT, fill=tk.Y)
+        scroll.config(command=textCodigo.yview)
+        textCodigo.config(yscrollcommand=scroll.set)
 
         textCodigo.insert(END, content)
         textCodigo.configure(state='disabled')  # SOLO LECTURA
@@ -105,30 +112,30 @@ def open_file():
             newtextRegistros = palabra[0:2]
             if (newtextRegistros in registers) or (newtextRegistros in (i.lower() for i in
                                                                         registers)):  # Hace recorrido para todos los elementos de la lista registros en minuscula
-                textoTotal += (newtextRegistros + '  ------> Es Registro' + '\n')
+                textoTotal += (newtextRegistros + '  ------> Registro' + '\n')
 
             if (palabra in instrucciones) or (palabra in (i.lower() for i in
                                                           instrucciones)):  # Hace recorrido para todos los elementos de la lista registros en minuscula
-                textoTotal += (palabra + '  ------> Es Instruccion' + '\n')
+                textoTotal += (palabra + '  ------> Instruccion' + '\n')
 
             if (palabra.isdigit()):
-                textoTotal += (palabra + '  ------> Es Constante Numerica Decimal' + '\n')
+                textoTotal += (palabra + '  ------> Constante Numerica Decimal' + '\n')
 
             if (palabra.endswith('H') or palabra.endswith('h')):
-                textoTotal += (palabra + '  ------> Es Constante Numerica Hexadecimal' + '\n')
+                textoTotal += (palabra + '  ------> Constante Numerica Hexadecimal' + '\n')
 
             if (validaBinario(palabra)):
-                textoTotal += (palabra + '  ------> Es Constante Numerica Binaria' + '\n')
+                textoTotal += (palabra + '  ------> Constante Numerica Binaria' + '\n')
 
             if validarSimbolo(palabra):
-                textoTotal += (palabra + '------> Es Simbolo' + '\n')
+                textoTotal += (palabra + '------> Simbolo' + '\n')
 
             if palabra in pseudoinstrucciones:
-                textoTotal += (palabra + '  ------> Es Pseudoinstruccion' + '\n')
+                textoTotal += (palabra + '  ------> Pseudoinstruccion' + '\n')
 
             if palabra2 == 'segment':
                 textoElementos += (palabra + ' ' + palabra2 + '\n')
-                textoTotal += (palabra + ' ' + palabra2 + '  ------> Es Pseudoinstruccion' + '\n')
+                textoTotal += (palabra + ' ' + palabra2 + '  ------> Pseudoinstruccion' + '\n')
 
             if palabra not in reservadas and (validarSimbolo(palabra) == False):
                 textoTotal += (palabra + '------> Elemento Invalido' + '\n')
@@ -157,7 +164,7 @@ def open_file():
 
 
 def windowElementosIdentificacion(contenido, contenido2):
-    ventanaElementos = Tk()
+    ventanaElementos = tk.Tk()
     ventanaElementos.geometry('700x700')
     ventanaElementos.title('Elementos')
     # ventanaElementos.iconbitmap('icon/asm.ico')
@@ -166,9 +173,17 @@ def windowElementosIdentificacion(contenido, contenido2):
                         fg="blue")
     labelTitulo.pack(side=TOP)
 
+    scroll = tk.Scrollbar(ventanaElementos)
     textElementos = Text(ventanaElementos, font='terminal', height=50, width=40)
-    scrollbar = Scrollbar(ventanaElementos, command=textElementos.yview())
-    scrollbar.pack(side=RIGHT)
+    scroll.pack(side=tk.RIGHT, fill=tk.Y)
+    textElementos.pack(side=tk.LEFT, fill=tk.Y)
+    scroll.config(command=textElementos.yview)
+    textElementos.config(yscrollcommand=scroll.set)
+
+
+    #, command = textElementos.yview()
+    #scrollbar = Scrollbar(ventanaElementos, command=textElementos.yview())
+    #scrollbar.pack(side=RIGHT)
 
     textElementos.insert(END, contenido)
     textElementos.configure(state='disabled')  # SOLO LECTURA
@@ -189,6 +204,13 @@ def windowElementosIdentificacion(contenido, contenido2):
     textIdentificación = Text(ventanaIdentificacion, font='terminal', height=100, width=80, foreground='blue')
     scrollbarIdentificacion = Scrollbar(ventanaIdentificacion, command=textIdentificación.yview())
     scrollbarIdentificacion.pack(side=RIGHT)
+
+    scroll = tk.Scrollbar(ventanaIdentificacion)
+    textIdentificación = Text(ventanaIdentificacion, font='terminal', height=60, width=60)
+    scroll.pack(side=tk.RIGHT, fill=tk.Y)
+    textIdentificación.pack(side=tk.LEFT, fill=tk.Y)
+    scroll.config(command=textIdentificación.yview)
+    textIdentificación.config(yscrollcommand=scroll.set)
 
     textIdentificación.insert(END, contenido2)
     textIdentificación.configure(state='disabled')  # SOLO LECTURA
