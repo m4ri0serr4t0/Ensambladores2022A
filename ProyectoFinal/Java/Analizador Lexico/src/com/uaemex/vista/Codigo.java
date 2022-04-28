@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package proyectofinalensambadores;
+package com.uaemex.vista;
 
 import java.io.FileReader;
 import javax.swing.JFileChooser;
@@ -15,6 +15,8 @@ import java.io.IOException;
 /**
  *
  * @author Juan
+ * @author Mario
+ * @author Omar
  */
 public class Codigo extends javax.swing.JFrame {
 
@@ -26,7 +28,6 @@ public class Codigo extends javax.swing.JFrame {
        
     }
 
-   
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {

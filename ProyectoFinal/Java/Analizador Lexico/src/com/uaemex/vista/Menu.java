@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package proyectofinalensambadores;
+package com.uaemex.vista;
 
 
 public class Menu extends javax.swing.JFrame {
@@ -13,7 +13,7 @@ public class Menu extends javax.swing.JFrame {
         initComponents();
     }
 
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -87,13 +87,13 @@ public class Menu extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         Codigo nf = new Codigo();
         nf.setVisible(true);
-        
-        
+
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         System.exit(Menu.EXIT_ON_CLOSE);
-        
+
     }//GEN-LAST:event_jButton2ActionPerformed
 
     
